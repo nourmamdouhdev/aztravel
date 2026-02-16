@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/auth.php';
 
@@ -21,16 +21,25 @@ if (!$trip) {
 
 $pageTitle = $trip['name'] . ' | AZTravel';
 $image = $trip['image_url'] ?: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80';
-$whatsAppNumber = '201001234567';
-$whatsAppText = rawurlencode('Hello AZTravel, I want details about the trip: ' . $trip['name']);
+$whatsAppNumber = '01224560635';
+$messageParts = [
+    'Hello AZTravel, I want to book this trip:',
+    'Trip: ' . $trip['name'],
+    'Price: ' . format_price((float)$trip['price']),
+    'Duration: ' . $trip['duration_days'] . ' days',
+];
+if (!empty($trip['details'])) {
+    $messageParts[] = 'Details: ' . $trip['details'];
+}
+$whatsAppText = rawurlencode(implode(' | ', $messageParts));
 $whatsAppLink = "https://wa.me/{$whatsAppNumber}?text={$whatsAppText}";
 
 require_once __DIR__ . '/includes/header.php';
 ?>
-<section class="trip-detail">
+<section class="trip-detail reveal">
     <div class="container">
         <a class="back-link" href="<?php echo e($trip['category']); ?>.php">← Back to <?php echo ucfirst(e($trip['category'])); ?> trips</a>
-        <div class="trip-detail-grid-4">
+        <div class="trip-detail-grid">
             <div>
                 <img src="<?php echo e($image); ?>" alt="<?php echo e($trip['name']); ?>">
             </div>
@@ -49,15 +58,39 @@ require_once __DIR__ . '/includes/header.php';
             </div>
         </div>
         <?php if (!empty($trip['itinerary'])): ?>
-            <div class="trip-section">
+            <div class="trip-section reveal">
                 <h3>Itinerary</h3>
                 <p><?php echo nl2br(e($trip['itinerary'])); ?></p>
             </div>
         <?php endif; ?>
         <?php if (!empty($trip['details'])): ?>
-            <div class="trip-section">
+            <div class="trip-section reveal">
                 <h3>Trip Details</h3>
                 <p><?php echo nl2br(e($trip['details'])); ?></p>
+            </div>
+        <?php endif; ?>
+        <?php if (!empty($trip['includes'])): ?>
+            <div class="trip-section reveal">
+                <h3>Includes</h3>
+                <p><?php echo nl2br(e($trip['includes'])); ?></p>
+            </div>
+        <?php endif; ?>
+        <?php if (!empty($trip['excludes'])): ?>
+            <div class="trip-section reveal">
+                <h3>Excludes</h3>
+                <p><?php echo nl2br(e($trip['excludes'])); ?></p>
+            </div>
+        <?php endif; ?>
+        <?php if (!empty($trip['pickup_time'])): ?>
+            <div class="trip-section reveal">
+                <h3>Pickup Time</h3>
+                <p><?php echo e($trip['pickup_time']); ?></p>
+            </div>
+        <?php endif; ?>
+        <?php if (!empty($trip['policy'])): ?>
+            <div class="trip-section">
+                <h3>Policy</h3>
+                <p><?php echo nl2br(e($trip['policy'])); ?></p>
             </div>
         <?php endif; ?>
     </div>

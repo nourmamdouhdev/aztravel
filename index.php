@@ -1,4 +1,7 @@
-﻿<?php
+<?php
+ob_start();
+
+
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/auth.php';
 
@@ -102,22 +105,22 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<section class="features">
+<section class="features reveal">
     <div class="container feature-grid">
         <div class="feature-card">
-            <img src="https://images.unsplash.com/photo-1542359649-31e03cd4d909?auto=format&fit=crop&w=800&q=80" alt="Religious trips">
+            <img src="https://themaydan.com/wp-content/uploads/2017/02/1SHAMSY-SLIDER-IMAGE.jpg" alt="Religious trips">
             <h3>Religious Trips</h3>
             <p>Curated pilgrimages with knowledgeable guides and thoughtful itineraries.</p>
             <a href="religious.php">Browse Trips</a>
         </div>
         <div class="feature-card">
-            <img src="https://images.unsplash.com/photo-1513897573398-037cf7c7d63b?auto=format&fit=crop&w=800&q=80" alt="Domestic trips">
+            <img src="https://d3rr2gvhjw0wwy.cloudfront.net/uploads/activity_teasers/42394/600x400-1-50-b09894ddd35c1450525a380f7c0f18dd.jpg" alt="Domestic trips">
             <h3>Domestic Trips</h3>
             <p>From desert oases to the Nile, discover Egypt’s most iconic sites.</p>
             <a href="domestic.php">Browse Trips</a>
         </div>
         <div class="feature-card">
-            <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80" alt="International trips">
+            <img src="https://cdn.modernghana.com/content__/640/457/88201714153_thetrip.jpg" alt="International trips">
             <h3>International Trips</h3>
             <p>Global itineraries with the same care and cultural depth.</p>
             <a href="international.php">Browse Trips</a>
@@ -125,7 +128,7 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<section id="featured" class="featured">
+<section id="featured" class="featured reveal">
     <div class="container">
         <div class="section-header">
             <h2>Featured Trips</h2>
@@ -156,7 +159,7 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<section id="contact" class="contact">
+<section id="contact" class="contact reveal">
     <div class="container contact-grid">
         <div class="contact-info">
             <h2>Plan your next journey</h2>
@@ -164,11 +167,11 @@ require_once __DIR__ . '/includes/header.php';
             <div class="info-cards">
                 <div>
                     <h4>Phone</h4>
-                    <p>+20 100 123 4567</p>
+                    <p>01224560635</p>
                 </div>
                 <div>
                     <h4>Email</h4>
-                    <p>hello@aztravel.com</p>
+                    <p>reservation@aztravel-eg.com</p>
                 </div>
                 <div>
                     <h4>Office</h4>

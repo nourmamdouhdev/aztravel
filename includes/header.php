@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 if (!isset($pageTitle)) {
     $pageTitle = 'AZTravel';
 }
@@ -17,7 +17,10 @@ if (!isset($pageTitle)) {
 <body>
 <header class="site-header">
     <div class="container nav-wrap">
-        <a class="logo" href="index.php">AZTravel</a>
+        <a class="logo" href="index.php">
+            <img src="assets/img/logo.png" alt="AZTravel logo">
+            <span class="logo-text">AZTravel</span> 
+        </a>
         <nav class="nav">
             <button class="btn ghost currency-btn" type="button">
                 <?php echo e(get_currency()); ?>
@@ -29,7 +32,26 @@ if (!isset($pageTitle)) {
 
             <?php if (is_logged_in()): ?>
                 <a href="dashboard.php">Dashboard</a>
-                <a href="logout.php">Logout</a>
+                <?php if (is_manager()): ?>
+                    <a href="users.php">Users</a>
+                <?php endif; ?>
+                <div class="user-menu">
+                    <button class="user-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+                        <?php if (!empty($_SESSION['admin_avatar'])): ?>
+                            <img src="<?php echo e($_SESSION['admin_avatar']); ?>" alt="Profile">
+                        <?php else: ?>
+                            <span class="avatar-fallback"><?php echo e(initials($_SESSION['admin_name'] ?? 'User')); ?></span>
+                        <?php endif; ?>
+                    </button>
+                    <div class="user-dropdown">
+                        <div class="user-meta">
+                            <strong><?php echo e($_SESSION['admin_name'] ?? 'User'); ?></strong>
+                            <span><?php echo e($_SESSION['admin_role'] ?? ''); ?></span>
+                        </div>
+                        <a href="profile.php">Profile</a>
+                        <a href="logout.php">Logout</a>
+                    </div>
+                </div>
             <?php else: ?>
                 <a class="btn" href="login.php">Admin Login</a>
             <?php endif; ?>

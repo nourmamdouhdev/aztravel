@@ -1,4 +1,4 @@
-﻿</main>
+</main>
 <footer class="site-footer">
     <div class="container footer-grid">
         <div>
@@ -7,8 +7,8 @@
         </div>
         <div>
             <h4>Contact</h4>
-            <p>+20 100 123 4567</p>
-            <p>hello@aztravel.com</p>
+            <p>01224560635  </p>
+            <p>reservation@aztravel-eg.com</p>
             <p>Cairo, Egypt</p>
         </div>
         <div>
@@ -18,6 +18,7 @@
         </div>
     </div>
     <p class="copyright">© <?php echo date('Y'); ?> AZTravel. All rights reserved.</p>
+    <p class="copyright">Website by SystemizEG</p>
 </footer>
 <a class="whatsapp-float" href="https://wa.me/201001234567?text=Hello%20AZTravel,%20I%20want%20to%20plan%20a%20trip." target="_blank" rel="noopener">WhatsApp</a>
 <script src="assets/js/main.js"></script>

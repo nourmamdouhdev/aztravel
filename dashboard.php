@@ -5,19 +5,41 @@ require_login();
 
 $pageTitle = 'Dashboard | AZTravel';
 
+$statsStmt = $pdo->query('SELECT COUNT(*) AS total_trips, COALESCE(SUM(availability), 0) AS total_available, MAX(updated_at) AS last_updated FROM trips');
+$stats = $statsStmt->fetch();
+
 $stmt = $pdo->query('SELECT * FROM trips ORDER BY created_at DESC');
 $trips = $stmt->fetchAll();
 
 require_once __DIR__ . '/includes/header.php';
 ?>
-<section class="dashboard">
+<section class="dashboard reveal">
     <div class="container">
         <div class="dashboard-header">
             <div>
                 <h2>Welcome, <?php echo e($_SESSION['admin_name'] ?? 'Admin'); ?></h2>
                 <p>Manage AZTravel trips and keep itineraries up to date.</p>
             </div>
-            <a class="btn" href="add_trip.php">Add New Trip</a>
+            <div class="dashboard-actions">
+                <?php if (is_manager()): ?>
+                    <a class="btn ghost" href="users.php">Manage Users</a>
+                <?php endif; ?>
+                <a class="btn" href="add_trip.php">Add New Trip</a>
+            </div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h4>Total Trips</h4>
+                <p><?php echo (int)($stats['total_trips'] ?? 0); ?></p>
+            </div>
+            <div class="stat-card">
+                <h4>Total Availability</h4>
+                <p><?php echo (int)($stats['total_available'] ?? 0); ?></p>
+            </div>
+            <div class="stat-card">
+                <h4>Last Updated</h4>
+                <p><?php echo e($stats['last_updated'] ?? 'N/A'); ?></p>
+            </div>
         </div>
         <div class="table-wrap">
             <table>

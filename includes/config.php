@@ -1,5 +1,4 @@
 ﻿<?php
-// Basic app configuration
 $DB_HOST = 'localhost';
 $DB_NAME = 'aztravel';
 $DB_USER = 'root';
@@ -11,6 +10,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $UPLOAD_DIR = __DIR__ . '/../uploads/trips';
 $UPLOAD_URL = 'uploads/trips';
+$AVATAR_DIR = __DIR__ . '/../uploads/avatars';
+$AVATAR_URL = 'uploads/avatars';
 
 $CURRENCIES = [
     'USD' => ['symbol' => '$', 'rate' => 1.0, 'label' => 'US Dollar'],
@@ -84,6 +85,63 @@ function upload_trip_image(array $file, array &$errors): ?string {
     return rtrim($UPLOAD_URL, '/') . '/' . $filename;
 }
 
+function upload_avatar(array $file, array &$errors): ?string {
+    global $AVATAR_DIR, $AVATAR_URL;
+
+    if (!isset($file['error']) || $file['error'] === UPLOAD_ERR_NO_FILE) {
+        return null;
+    }
+
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        $errors[] = 'Avatar upload failed.';
+        return null;
+    }
+
+    if ($file['size'] > 2 * 1024 * 1024) {
+        $errors[] = 'Avatar must be less than 2MB.';
+        return null;
+    }
+
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->file($file['tmp_name']);
+    $allowed = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+    ];
+
+    if (!isset($allowed[$mime])) {
+        $errors[] = 'Only JPG, PNG, or WEBP avatars are allowed.';
+        return null;
+    }
+
+    if (!is_dir($AVATAR_DIR) && !mkdir($AVATAR_DIR, 0755, true)) {
+        $errors[] = 'Avatar upload folder is not writable.';
+        return null;
+    }
+
+    $filename = bin2hex(random_bytes(10)) . '.' . $allowed[$mime];
+    $destination = rtrim($AVATAR_DIR, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename;
+
+    if (!move_uploaded_file($file['tmp_name'], $destination)) {
+        $errors[] = 'Failed to save avatar.';
+        return null;
+    }
+
+    return rtrim($AVATAR_URL, '/') . '/' . $filename;
+}
+
+function initials(string $name): string {
+    $parts = preg_split('/\s+/', trim($name));
+    $initials = '';
+    foreach ($parts as $part) {
+        if ($part !== '') {
+            $initials .= mb_strtoupper(mb_substr($part, 0, 1));
+        }
+    }
+    return $initials !== '' ? $initials : 'U';
+}
+
 function get_currency(): string {
     global $CURRENCIES, $DEFAULT_CURRENCY;
     $currency = $_SESSION['currency'] ?? $DEFAULT_CURRENCY;
@@ -110,4 +168,3 @@ function verify_csrf(): bool {
     return isset($_POST['csrf_token'], $_SESSION['csrf_token'])
         && hash_equals($_SESSION['csrf_token'], $_POST['csrf_token']);
 }
-?>

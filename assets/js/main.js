@@ -44,4 +44,38 @@
       }
     });
   }
+
+  const revealItems = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && revealItems.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
+    );
+    revealItems.forEach((item) => observer.observe(item));
+  } else {
+    revealItems.forEach((item) => item.classList.add('in-view'));
+  }
+
+  const userToggle = document.querySelector('.user-toggle');
+  const userDropdown = document.querySelector('.user-dropdown');
+  if (userToggle && userDropdown) {
+    userToggle.addEventListener('click', () => {
+      const isOpen = userDropdown.classList.toggle('open');
+      userToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!userToggle.contains(event.target) && !userDropdown.contains(event.target)) {
+        userDropdown.classList.remove('open');
+        userToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
 });

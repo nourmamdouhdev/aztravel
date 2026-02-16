@@ -17,13 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = trim($_POST['username'] ?? '');
         $password = $_POST['password'] ?? '';
 
-        $stmt = $pdo->prepare('SELECT id, username, password_hash FROM users WHERE username = :username LIMIT 1');
+        $stmt = $pdo->prepare('SELECT id, username, password_hash, role, full_name, avatar_url FROM users WHERE username = :username LIMIT 1');
         $stmt->execute(['username' => $username]);
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password_hash'])) {
             $_SESSION['admin_id'] = $user['id'];
-            $_SESSION['admin_name'] = $user['username'];
+            $_SESSION['admin_name'] = $user['full_name'] ?: $user['username'];
+            $_SESSION['admin_role'] = $user['role'];
+            $_SESSION['admin_avatar'] = $user['avatar_url'];
             header('Location: dashboard.php');
             exit;
         }
@@ -34,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 require_once __DIR__ . '/includes/header.php';
 ?>
-<section class="auth">
+<section class="auth reveal">
     <div class="container auth-card">
         <h2>Admin Login</h2>
         <p>Sign in to manage trips and schedules.</p>

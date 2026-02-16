@@ -40,7 +40,7 @@ $trips = $stmt->fetchAll();
 
 require_once __DIR__ . '/header.php';
 ?>
-<section class="category-hero">
+<section class="category-hero reveal">
     <div class="container">
         <p class="eyebrow">AZTravel · <?php echo ucfirst(e($category)); ?> trips</p>
         <h1><?php echo e($pageTitle); ?></h1>
@@ -48,7 +48,7 @@ require_once __DIR__ . '/header.php';
     </div>
 </section>
 
-<section class="filters">
+<section class="filters reveal">
     <div class="container">
         <form class="filter-form" method="get">
             <input type="text" name="q" placeholder="Search trips" value="<?php echo e($search); ?>">
@@ -61,7 +61,7 @@ require_once __DIR__ . '/header.php';
     </div>
 </section>
 
-<section class="trip-list">
+<section class="trip-list reveal">
     <div class="container">
         <div class="trip-grid">
             <?php if (empty($trips)): ?>

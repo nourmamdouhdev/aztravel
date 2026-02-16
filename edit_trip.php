@@ -29,6 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $itinerary = trim($_POST['itinerary'] ?? '');
         $availability = trim($_POST['availability'] ?? '');
         $details = trim($_POST['details'] ?? '');
+        $includes = trim($_POST['includes'] ?? '');
+        $excludes = trim($_POST['excludes'] ?? '');
+        $pickup_time = trim($_POST['pickup_time'] ?? '');
+        $policy = trim($_POST['policy'] ?? '');
         $image_url = $trip['image_url'];
 
         if ($name === '' || $description === '' || $price === '' || $duration === '' || $category === '') {
@@ -58,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $image_url = $uploadedImage;
             }
 
-            $stmt = $pdo->prepare('UPDATE trips SET name = :name, description = :description, price = :price, duration_days = :duration_days, category = :category, image_url = :image_url, itinerary = :itinerary, details = :details, availability = :availability WHERE id = :id');
+            $stmt = $pdo->prepare('UPDATE trips SET name = :name, description = :description, price = :price, duration_days = :duration_days, category = :category, image_url = :image_url, itinerary = :itinerary, details = :details, includes = :includes, excludes = :excludes, pickup_time = :pickup_time, policy = :policy, availability = :availability WHERE id = :id');
             $stmt->execute([
                 'name' => $name,
                 'description' => $description,
@@ -68,6 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'image_url' => $image_url,
                 'itinerary' => $itinerary,
                 'details' => $details,
+                'includes' => $includes,
+                'excludes' => $excludes,
+                'pickup_time' => $pickup_time,
+                'policy' => $policy,
                 'availability' => $availability === '' ? 0 : (int)$availability,
                 'id' => $id,
             ]);
@@ -85,6 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'image_url' => $image_url ?? $trip['image_url'],
             'itinerary' => $itinerary,
             'details' => $details,
+            'includes' => $includes,
+            'excludes' => $excludes,
+            'pickup_time' => $pickup_time,
+            'policy' => $policy,
             'availability' => $availability,
         ]);
     }
@@ -128,6 +140,22 @@ require_once __DIR__ . '/includes/header.php';
             <label class="full">
                 Details
                 <textarea name="details" rows="4"><?php echo e($trip['details'] ?? ''); ?></textarea>
+            </label>
+            <label class="full">
+                Includes
+                <textarea name="includes" rows="3"><?php echo e($trip['includes'] ?? ''); ?></textarea>
+            </label>
+            <label class="full">
+                Excludes
+                <textarea name="excludes" rows="3"><?php echo e($trip['excludes'] ?? ''); ?></textarea>
+            </label>
+            <label>
+                Pickup Time
+                <input type="text" name="pickup_time" value="<?php echo e($trip['pickup_time'] ?? ''); ?>">
+            </label>
+            <label class="full">
+                Policy
+                <textarea name="policy" rows="3"><?php echo e($trip['policy'] ?? ''); ?></textarea>
             </label>
             <label class="full">
                 Replace Image (JPG/PNG/WEBP, max 4MB)
