@@ -47,11 +47,57 @@ require_once __DIR__ . '/includes/header.php';
         </div>
         <div class="hero-card">
             <h3>Signature Experiences</h3>
-            <ul>
-                <li>Guided spiritual journeys to holy sites</li>
-                <li>Domestic tours from Alexandria to Aswan</li>
-                <li>International packages with local experts</li>
-            </ul>
+            <div class="hero-badges">
+                <div class="hero-badge">
+                    <span class="badge-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img">
+                            <path d="M12 2.5a6.5 6.5 0 0 1 6.5 6.5c0 4.3-6.5 12-6.5 12S5.5 13.3 5.5 9A6.5 6.5 0 0 1 12 2.5Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="12" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </span>
+                    <p>Experts in Siwa & Taba</p>
+                </div>
+                <div class="hero-badge">
+                    <span class="badge-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img">
+                            <path d="M4 7h16M7 7v10M12 7v10M17 7v10M4 17h16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <p>Customized trips</p>
+                </div>
+                <div class="hero-badge">
+                    <span class="badge-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img">
+                            <path d="M12 3l3.5 7 7.5 1-5.5 5.2 1.4 7.8L12 19l-6.9 4 1.4-7.8L1 11l7.5-1z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <p>Adventure</p>
+                </div>
+                <div class="hero-badge">
+                    <span class="badge-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img">
+                            <path d="M5 10V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M3 10h18M6 10v8h12v-8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <p>Hotels are cheap</p>
+                </div>
+                <div class="hero-badge">
+                    <span class="badge-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img">
+                            <path d="M4 15h16M6 15V9h12v6M7 9V7h10v2M8 15v3M16 15v3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <p>Transportation operations</p>
+                </div>
+                <div class="hero-badge">
+                    <span class="badge-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="img">
+                            <path d="M3 12h18M12 4l4 6h5l-4 3.5L18 20l-6-3.5L6 20l1.5-6.5L3 10h5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <p>Airplane prices are low</p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -99,7 +145,7 @@ require_once __DIR__ . '/includes/header.php';
                             <p><?php echo e($trip['description']); ?></p>
                             <div class="trip-meta">
                                 <span><?php echo e($trip['duration_days']); ?> days</span>
-                                <span>$<?php echo number_format((float)$trip['price'], 2); ?></span>
+                                <span><?php echo format_price((float)$trip['price']); ?></span>
                             </div>
                             <a class="btn ghost small" href="trip.php?id=<?php echo (int)$trip['id']; ?>">View details</a>
                         </div>

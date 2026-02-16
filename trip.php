@@ -30,7 +30,7 @@ require_once __DIR__ . '/includes/header.php';
 <section class="trip-detail">
     <div class="container">
         <a class="back-link" href="<?php echo e($trip['category']); ?>.php">← Back to <?php echo ucfirst(e($trip['category'])); ?> trips</a>
-        <div class="trip-detail-grid">
+        <div class="trip-detail-grid-4">
             <div>
                 <img src="<?php echo e($image); ?>" alt="<?php echo e($trip['name']); ?>">
             </div>
@@ -40,7 +40,7 @@ require_once __DIR__ . '/includes/header.php';
                 <p><?php echo e($trip['description']); ?></p>
                 <div class="trip-meta">
                     <span><?php echo e($trip['duration_days']); ?> days</span>
-                    <span>$<?php echo number_format((float)$trip['price'], 2); ?></span>
+                    <span><?php echo format_price((float)$trip['price']); ?></span>
                     <span>Availability: <?php echo e($trip['availability']); ?></span>
                 </div>
                 <div class="trip-actions">

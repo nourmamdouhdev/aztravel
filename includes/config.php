@@ -9,6 +9,19 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$UPLOAD_DIR = __DIR__ . '/../uploads/trips';
+$UPLOAD_URL = 'uploads/trips';
+
+$CURRENCIES = [
+    'USD' => ['symbol' => '$', 'rate' => 1.0, 'label' => 'US Dollar'],
+    'EGP' => ['symbol' => 'E£', 'rate' => 49.5, 'label' => 'Egyptian Pound'],
+    'EUR' => ['symbol' => '€', 'rate' => 0.92, 'label' => 'Euro'],
+    'GBP' => ['symbol' => '£', 'rate' => 0.79, 'label' => 'Pound Sterling'],
+    'SAR' => ['symbol' => 'SAR', 'rate' => 3.75, 'label' => 'Saudi Riyal'],
+    'AED' => ['symbol' => 'AED', 'rate' => 3.67, 'label' => 'UAE Dirham'],
+];
+$DEFAULT_CURRENCY = 'USD';
+
 try {
     $dsn = "mysql:host={$DB_HOST};dbname={$DB_NAME};charset=utf8mb4";
     $pdo = new PDO($dsn, $DB_USER, $DB_PASS, [
@@ -23,6 +36,67 @@ try {
 
 function e(string $value): string {
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}
+
+function upload_trip_image(array $file, array &$errors): ?string {
+    global $UPLOAD_DIR, $UPLOAD_URL;
+
+    if (!isset($file['error']) || $file['error'] === UPLOAD_ERR_NO_FILE) {
+        return null;
+    }
+
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        $errors[] = 'Image upload failed.';
+        return null;
+    }
+
+    if ($file['size'] > 4 * 1024 * 1024) {
+        $errors[] = 'Image must be less than 4MB.';
+        return null;
+    }
+
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->file($file['tmp_name']);
+    $allowed = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+    ];
+
+    if (!isset($allowed[$mime])) {
+        $errors[] = 'Only JPG, PNG, or WEBP images are allowed.';
+        return null;
+    }
+
+    if (!is_dir($UPLOAD_DIR) && !mkdir($UPLOAD_DIR, 0755, true)) {
+        $errors[] = 'Upload folder is not writable.';
+        return null;
+    }
+
+    $filename = bin2hex(random_bytes(10)) . '.' . $allowed[$mime];
+    $destination = rtrim($UPLOAD_DIR, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename;
+
+    if (!move_uploaded_file($file['tmp_name'], $destination)) {
+        $errors[] = 'Failed to save uploaded image.';
+        return null;
+    }
+
+    return rtrim($UPLOAD_URL, '/') . '/' . $filename;
+}
+
+function get_currency(): string {
+    global $CURRENCIES, $DEFAULT_CURRENCY;
+    $currency = $_SESSION['currency'] ?? $DEFAULT_CURRENCY;
+    return array_key_exists($currency, $CURRENCIES) ? $currency : $DEFAULT_CURRENCY;
+}
+
+function format_price(float $amountUsd): string {
+    global $CURRENCIES;
+    $currency = get_currency();
+    $rate = $CURRENCIES[$currency]['rate'] ?? 1.0;
+    $symbol = $CURRENCIES[$currency]['symbol'] ?? '$';
+    $converted = $amountUsd * $rate;
+    return $symbol . number_format($converted, 2);
 }
 
 function csrf_token(): string {

@@ -42,7 +42,7 @@ require_once __DIR__ . '/includes/header.php';
                             <tr>
                                 <td><?php echo e($trip['name']); ?></td>
                                 <td><?php echo ucfirst(e($trip['category'])); ?></td>
-                                <td>$<?php echo number_format((float)$trip['price'], 2); ?></td>
+                                <td><?php echo format_price((float)$trip['price']); ?></td>
                                 <td><?php echo e($trip['duration_days']); ?> days</td>
                                 <td><?php echo e($trip['availability']); ?></td>
                                 <td><?php echo e($trip['updated_at']); ?></td>

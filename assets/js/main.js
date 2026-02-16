@@ -18,4 +18,30 @@
       nav.classList.toggle('open');
     });
   }
+
+  const currencyBtn = document.querySelector('.currency-btn');
+  const currencyModal = document.getElementById('currency-modal');
+  if (currencyBtn && currencyModal) {
+    const closeModal = () => {
+      currencyModal.classList.remove('open');
+      currencyModal.setAttribute('aria-hidden', 'true');
+    };
+
+    currencyBtn.addEventListener('click', () => {
+      currencyModal.classList.add('open');
+      currencyModal.setAttribute('aria-hidden', 'false');
+    });
+
+    currencyModal.addEventListener('click', (event) => {
+      if (event.target.dataset.close === 'true') {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    });
+  }
 });

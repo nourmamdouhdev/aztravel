@@ -9,6 +9,7 @@ AZTravel is a PHP + MySQL travel booking showcase with three trip categories, a 
    - Import `sql/aztravel.sql` into MySQL (phpMyAdmin or CLI).
    - If you already imported earlier, run: `ALTER TABLE trips ADD COLUMN details TEXT AFTER itinerary;`
 3. Update database credentials in `includes/config.php` if needed.
+4. Ensure `uploads/trips` is writable by the web server for image uploads.
 4. Visit `http://localhost/aztravel/index.php`.
 
 ## Admin Login
@@ -27,3 +28,4 @@ AZTravel is a PHP + MySQL travel booking showcase with three trip categories, a 
 ## Notes
 - Images are loaded from remote URLs (Unsplash).
 - Contact form is a safe front-end submission placeholder (no email sent).
+- Currency conversion uses static rates in `includes/config.php`. Update them as needed.

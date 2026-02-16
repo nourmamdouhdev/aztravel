@@ -19,10 +19,14 @@ if (!isset($pageTitle)) {
     <div class="container nav-wrap">
         <a class="logo" href="index.php">AZTravel</a>
         <nav class="nav">
+            <button class="btn ghost currency-btn" type="button">
+                <?php echo e(get_currency()); ?>
+            </button>
             <a href="index.php">Home</a>
             <a href="religious.php">Religious</a>
             <a href="domestic.php">Domestic</a>
             <a href="international.php">International</a>
+
             <?php if (is_logged_in()): ?>
                 <a href="dashboard.php">Dashboard</a>
                 <a href="logout.php">Logout</a>
@@ -33,4 +37,27 @@ if (!isset($pageTitle)) {
         <button class="nav-toggle" aria-label="Open menu">Menu</button>
     </div>
 </header>
+<div class="modal" id="currency-modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="currency-title">
+        <div class="modal-header">
+            <h3 id="currency-title">Select your currency</h3>
+            <button class="modal-close" type="button" data-close="true">×</button>
+        </div>
+        <p class="modal-subtitle">Prices will be converted to the currency you select.</p>
+        <form class="currency-form" method="post" action="set_currency.php">
+            <label>
+                Currency
+                <select name="currency" required>
+                    <?php foreach ($CURRENCIES as $code => $info): ?>
+                        <option value="<?php echo e($code); ?>" <?php echo ($code === get_currency()) ? 'selected' : ''; ?>>
+                            <?php echo e($info['label'] . ' (' . $code . ')'); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </label>
+            <button class="btn" type="submit">Apply</button>
+        </form>
+    </div>
+</div>
 <main>

@@ -26,10 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $price = trim($_POST['price'] ?? '');
         $duration = trim($_POST['duration_days'] ?? '');
         $category = $_POST['category'] ?? '';
-        $image_url = trim($_POST['image_url'] ?? '');
         $itinerary = trim($_POST['itinerary'] ?? '');
         $availability = trim($_POST['availability'] ?? '');
         $details = trim($_POST['details'] ?? '');
+        $image_url = $trip['image_url'];
 
         if ($name === '' || $description === '' || $price === '' || $duration === '' || $category === '') {
             $errors[] = 'Please fill in all required fields.';
@@ -52,7 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Invalid category selected.';
         }
 
+        $uploadedImage = upload_trip_image($_FILES['image_file'] ?? [], $errors);
         if (empty($errors)) {
+            if ($uploadedImage) {
+                $image_url = $uploadedImage;
+            }
+
             $stmt = $pdo->prepare('UPDATE trips SET name = :name, description = :description, price = :price, duration_days = :duration_days, category = :category, image_url = :image_url, itinerary = :itinerary, details = :details, availability = :availability WHERE id = :id');
             $stmt->execute([
                 'name' => $name,
@@ -77,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'price' => $price,
             'duration_days' => $duration,
             'category' => $category,
-            'image_url' => $image_url,
+            'image_url' => $image_url ?? $trip['image_url'],
             'itinerary' => $itinerary,
             'details' => $details,
             'availability' => $availability,
@@ -90,7 +95,7 @@ require_once __DIR__ . '/includes/header.php';
 <section class="dashboard">
     <div class="container form-page">
         <h2>Edit Trip</h2>
-        <form method="post" class="form-grid">
+        <form method="post" class="form-grid" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="<?php echo e(csrf_token()); ?>">
             <label>
                 Trip name *
@@ -125,9 +130,15 @@ require_once __DIR__ . '/includes/header.php';
                 <textarea name="details" rows="4"><?php echo e($trip['details'] ?? ''); ?></textarea>
             </label>
             <label class="full">
-                Image URL
-                <input type="url" name="image_url" value="<?php echo e($trip['image_url']); ?>">
+                Replace Image (JPG/PNG/WEBP, max 4MB)
+                <input type="file" name="image_file" accept="image/*">
             </label>
+            <?php if (!empty($trip['image_url'])): ?>
+                <div class="full">
+                    <p>Current image preview:</p>
+                    <img src="<?php echo e($trip['image_url']); ?>" alt="<?php echo e($trip['name']); ?>" style="max-width: 220px; border-radius: 12px;">
+                </div>
+            <?php endif; ?>
             <label>
                 Availability
                 <input type="number" name="availability" value="<?php echo e($trip['availability']); ?>">

@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $price = trim($_POST['price'] ?? '');
         $duration = trim($_POST['duration_days'] ?? '');
         $category = $_POST['category'] ?? '';
-        $image_url = trim($_POST['image_url'] ?? '');
         $itinerary = trim($_POST['itinerary'] ?? '');
         $availability = trim($_POST['availability'] ?? '');
         $details = trim($_POST['details'] ?? '');
@@ -41,6 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Invalid category selected.';
         }
 
+        $uploadedImage = upload_trip_image($_FILES['image_file'] ?? [], $errors);
+        if (!$uploadedImage && empty($errors)) {
+            $errors[] = 'Please upload a trip image.';
+        }
+
         if (empty($errors)) {
             $stmt = $pdo->prepare('INSERT INTO trips (name, description, price, duration_days, category, image_url, itinerary, details, availability) VALUES (:name, :description, :price, :duration_days, :category, :image_url, :itinerary, :details, :availability)');
             $stmt->execute([
@@ -49,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'price' => $price,
                 'duration_days' => $duration,
                 'category' => $category,
-                'image_url' => $image_url ?: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80',
+                'image_url' => $uploadedImage,
                 'itinerary' => $itinerary,
                 'details' => $details,
                 'availability' => $availability === '' ? 0 : (int)$availability,
@@ -66,7 +70,7 @@ require_once __DIR__ . '/includes/header.php';
 <section class="dashboard">
     <div class="container form-page">
         <h2>Add New Trip</h2>
-        <form method="post" class="form-grid">
+        <form method="post" class="form-grid" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="<?php echo e(csrf_token()); ?>">
             <label>
                 Trip name *
@@ -102,8 +106,8 @@ require_once __DIR__ . '/includes/header.php';
                 <textarea name="details" rows="4"><?php echo e($_POST['details'] ?? ''); ?></textarea>
             </label>
             <label class="full">
-                Image URL
-                <input type="url" name="image_url" value="<?php echo e($_POST['image_url'] ?? ''); ?>">
+                Trip Image (JPG/PNG/WEBP, max 4MB)
+                <input type="file" name="image_file" accept="image/*" required>
             </label>
             <label>
                 Availability

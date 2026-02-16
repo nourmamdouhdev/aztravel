@@ -77,7 +77,7 @@ require_once __DIR__ . '/header.php';
                             <p><?php echo e($trip['description']); ?></p>
                             <div class="trip-meta">
                                 <span><?php echo e($trip['duration_days']); ?> days</span>
-                                <span>$<?php echo number_format((float)$trip['price'], 2); ?></span>
+                                <span><?php echo format_price((float)$trip['price']); ?></span>
                             </div>
                             <a class="btn ghost small" href="trip.php?id=<?php echo (int)$trip['id']; ?>">View details</a>
                             <?php if (!empty($trip['itinerary'])): ?>
