@@ -19,6 +19,7 @@
     </div>
     <p class="copyright">© <?php echo date('Y'); ?> AZTravel. All rights reserved.</p>
 </footer>
+<a class="whatsapp-float" href="https://wa.me/201001234567?text=Hello%20AZTravel,%20I%20want%20to%20plan%20a%20trip." target="_blank" rel="noopener">WhatsApp</a>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

@@ -79,6 +79,7 @@ require_once __DIR__ . '/header.php';
                                 <span><?php echo e($trip['duration_days']); ?> days</span>
                                 <span>$<?php echo number_format((float)$trip['price'], 2); ?></span>
                             </div>
+                            <a class="btn ghost small" href="trip.php?id=<?php echo (int)$trip['id']; ?>">View details</a>
                             <?php if (!empty($trip['itinerary'])): ?>
                                 <details>
                                     <summary>View itinerary</summary>

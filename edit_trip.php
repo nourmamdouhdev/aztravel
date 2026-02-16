@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $image_url = trim($_POST['image_url'] ?? '');
         $itinerary = trim($_POST['itinerary'] ?? '');
         $availability = trim($_POST['availability'] ?? '');
+        $details = trim($_POST['details'] ?? '');
 
         if ($name === '' || $description === '' || $price === '' || $duration === '' || $category === '') {
             $errors[] = 'Please fill in all required fields.';
@@ -52,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($errors)) {
-            $stmt = $pdo->prepare('UPDATE trips SET name = :name, description = :description, price = :price, duration_days = :duration_days, category = :category, image_url = :image_url, itinerary = :itinerary, availability = :availability WHERE id = :id');
+            $stmt = $pdo->prepare('UPDATE trips SET name = :name, description = :description, price = :price, duration_days = :duration_days, category = :category, image_url = :image_url, itinerary = :itinerary, details = :details, availability = :availability WHERE id = :id');
             $stmt->execute([
                 'name' => $name,
                 'description' => $description,
@@ -61,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'category' => $category,
                 'image_url' => $image_url,
                 'itinerary' => $itinerary,
+                'details' => $details,
                 'availability' => $availability === '' ? 0 : (int)$availability,
                 'id' => $id,
             ]);
@@ -77,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'category' => $category,
             'image_url' => $image_url,
             'itinerary' => $itinerary,
+            'details' => $details,
             'availability' => $availability,
         ]);
     }
@@ -116,6 +119,10 @@ require_once __DIR__ . '/includes/header.php';
             <label class="full">
                 Itinerary
                 <textarea name="itinerary" rows="4"><?php echo e($trip['itinerary']); ?></textarea>
+            </label>
+            <label class="full">
+                Details
+                <textarea name="details" rows="4"><?php echo e($trip['details'] ?? ''); ?></textarea>
             </label>
             <label class="full">
                 Image URL

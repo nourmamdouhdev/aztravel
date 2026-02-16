@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $image_url = trim($_POST['image_url'] ?? '');
         $itinerary = trim($_POST['itinerary'] ?? '');
         $availability = trim($_POST['availability'] ?? '');
+        $details = trim($_POST['details'] ?? '');
 
         if ($name === '' || $description === '' || $price === '' || $duration === '' || $category === '') {
             $errors[] = 'Please fill in all required fields.';
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (empty($errors)) {
-            $stmt = $pdo->prepare('INSERT INTO trips (name, description, price, duration_days, category, image_url, itinerary, availability) VALUES (:name, :description, :price, :duration_days, :category, :image_url, :itinerary, :availability)');
+            $stmt = $pdo->prepare('INSERT INTO trips (name, description, price, duration_days, category, image_url, itinerary, details, availability) VALUES (:name, :description, :price, :duration_days, :category, :image_url, :itinerary, :details, :availability)');
             $stmt->execute([
                 'name' => $name,
                 'description' => $description,
@@ -50,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'category' => $category,
                 'image_url' => $image_url ?: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80',
                 'itinerary' => $itinerary,
+                'details' => $details,
                 'availability' => $availability === '' ? 0 : (int)$availability,
             ]);
 
@@ -94,6 +96,10 @@ require_once __DIR__ . '/includes/header.php';
             <label class="full">
                 Itinerary
                 <textarea name="itinerary" rows="4"><?php echo e($_POST['itinerary'] ?? ''); ?></textarea>
+            </label>
+            <label class="full">
+                Details
+                <textarea name="details" rows="4"><?php echo e($_POST['details'] ?? ''); ?></textarea>
             </label>
             <label class="full">
                 Image URL

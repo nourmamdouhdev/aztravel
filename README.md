@@ -7,6 +7,7 @@ AZTravel is a PHP + MySQL travel booking showcase with three trip categories, a 
 1. Ensure Apache and MySQL are running (XAMPP).
 2. Create the database and tables:
    - Import `sql/aztravel.sql` into MySQL (phpMyAdmin or CLI).
+   - If you already imported earlier, run: `ALTER TABLE trips ADD COLUMN details TEXT AFTER itinerary;`
 3. Update database credentials in `includes/config.php` if needed.
 4. Visit `http://localhost/aztravel/index.php`.
 
@@ -19,6 +20,7 @@ AZTravel is a PHP + MySQL travel booking showcase with three trip categories, a 
 - Religious trips: `religious.php`
 - Domestic trips: `domestic.php`
 - International trips: `international.php`
+- Trip details: `trip.php?id=1`
 - Admin login: `login.php`
 - Dashboard: `dashboard.php`
 
