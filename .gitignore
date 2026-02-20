@@ -1,0 +1,32 @@
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# Uploaded files (keep folder structure via .gitkeep if needed)
+uploads/trips/*
+uploads/avatars/*
+!uploads/trips/.gitkeep
+!uploads/avatars/.gitkeep
+
+# PHP
+vendor/
+composer.lock
+*.log
+php_errors.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Optional: uncomment if you add Node/npm
+# node_modules/
+# npm-debug.log
